@@ -60,7 +60,8 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         "🎬 Tôi có thể giúp bạn tải video từ:\n"
         "• YouTube\n"
         "• Facebook\n"
-        "• Instagram\n\n"
+        "• Instagram\n"
+        "• TikTok\n\n"
         "📝 Cách sử dụng: Chỉ cần gửi link video cho tôi!\n\n"
         "💡 Gõ /help để xem hướng dẫn chi tiết."
     )
@@ -79,16 +80,18 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     help_message = (
         "📖 Hướng dẫn sử dụng Video Downloader Bot\n\n"
         "🎯 Các nền tảng được hỗ trợ:\n"
-        "• YouTube (youtube.com, youtu.be)\n"
-        "• Facebook (facebook.com, fb.watch)\n"
-        "• Instagram (instagram.com/p/, instagram.com/reel/)\n\n"
+        "• YouTube (youtube.com, youtu.be, shorts)\n"
+        "• Facebook (facebook.com, fb.watch, reel)\n"
+        "• Instagram (instagram.com/p/, /reel/, /reels/)\n"
+        "• TikTok (tiktok.com, vm.tiktok.com)\n\n"
         "📝 Cách sử dụng:\n"
         "1. Copy link video từ nền tảng bạn muốn\n"
         "2. Gửi link đó cho bot\n"
         "3. Đợi bot tải và gửi video về cho bạn\n\n"
         "⚠️ Lưu ý:\n"
         "• Video phải có kích thước dưới 50MB\n"
-        "• Một số video riêng tư có thể không tải được\n\n"
+        "• Một số video riêng tư có thể không tải được\n"
+        "• Douyin, RedNote không được hỗ trợ\n\n"
         "🔧 Các lệnh:\n"
         "/start - Bắt đầu sử dụng bot\n"
         "/help - Xem hướng dẫn này\n"
@@ -111,7 +114,8 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         "🎬 Sẵn sàng tải video từ:\n"
         "• YouTube ✓\n"
         "• Facebook ✓\n"
-        "• Instagram ✓\n\n"
+        "• Instagram ✓\n"
+        "• TikTok ✓\n\n"
         "📤 Gửi link video để bắt đầu!"
     )
     await update.message.reply_text(status_message)
@@ -146,7 +150,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "📝 Vui lòng gửi link video từ:\n"
             "• YouTube\n"
             "• Facebook\n"
-            "• Instagram\n\n"
+            "• Instagram\n"
+            "• TikTok\n\n"
             "💡 Gõ /help để xem hướng dẫn chi tiết."
         )
         return
@@ -158,7 +163,26 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "🎬 Các nền tảng được hỗ trợ:\n"
             "• YouTube (youtube.com, youtu.be)\n"
             "• Facebook (facebook.com, fb.watch)\n"
-            "• Instagram (instagram.com)"
+            "• Instagram (instagram.com)\n"
+            "• TikTok (tiktok.com)"
+        )
+        return
+    
+    # Kiểm tra Douyin (không hỗ trợ vì yêu cầu đăng nhập)
+    if platform == Platform.DOUYIN:
+        await update.message.reply_text(
+            "❌ Không hỗ trợ tải video từ Douyin.\n\n"
+            "📝 Douyin yêu cầu đăng nhập để tải video, bot không thể tải được.\n\n"
+            "💡 Bạn có thể thử tải video từ các nền tảng khác như TikTok, YouTube, Facebook hoặc Instagram."
+        )
+        return
+    
+    # Kiểm tra RedNote (không hỗ trợ)
+    if platform == Platform.REDNOTE:
+        await update.message.reply_text(
+            "❌ Không hỗ trợ tải video từ RedNote (Xiaohongshu).\n\n"
+            "📝 RedNote hiện không được hỗ trợ do hạn chế kỹ thuật.\n\n"
+            "💡 Bạn có thể thử tải video từ các nền tảng khác như TikTok, YouTube, Facebook hoặc Instagram."
         )
         return
     

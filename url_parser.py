@@ -38,6 +38,28 @@ PLATFORM_PATTERNS: dict[Platform, list[str]] = {
         # instagram.com/stories/USERNAME/STORY_ID
         r"(?:https?://)?(?:www\.)?instagram\.com/stories/[\w._]+/\d+",
     ],
+    Platform.TIKTOK: [
+        # tiktok.com/@username/video/VIDEO_ID
+        r"(?:https?://)?(?:www\.)?tiktok\.com/@[\w.-]+/video/\d+",
+        # vm.tiktok.com/VIDEO_ID (short link)
+        r"(?:https?://)?vm\.tiktok\.com/[\w-]+",
+        # vt.tiktok.com/VIDEO_ID (short link)
+        r"(?:https?://)?vt\.tiktok\.com/[\w-]+",
+    ],
+    Platform.DOUYIN: [
+        # douyin.com/video/VIDEO_ID
+        r"(?:https?://)?(?:www\.)?douyin\.com/video/\d+",
+        # v.douyin.com/VIDEO_ID/ (short link với path dài)
+        r"(?:https?://)?v\.douyin\.com/[\w-]+/?",
+    ],
+    Platform.REDNOTE: [
+        # xiaohongshu.com/explore/NOTE_ID
+        r"(?:https?://)?(?:www\.)?xiaohongshu\.com/explore/[\w]+",
+        # xiaohongshu.com/discovery/item/NOTE_ID (có thể có query params)
+        r"(?:https?://)?(?:www\.)?xiaohongshu\.com/discovery/item/[\w]+",
+        # xhslink.com/NOTE_ID (short link)
+        r"(?:https?://)?xhslink\.com/[\w]+",
+    ],
 }
 
 

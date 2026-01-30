@@ -80,6 +80,7 @@ def _is_video_not_found_error(error_str: str) -> bool:
         "deleted",
         "unavailable",
         "no video",
+        "no video formats found",
         "404"
     ]
     return any(keyword in error_str for keyword in not_found_keywords)

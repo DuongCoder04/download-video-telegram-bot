@@ -57,6 +57,9 @@ class Platform(Enum):
     YOUTUBE = "youtube"
     FACEBOOK = "facebook"
     INSTAGRAM = "instagram"
+    TIKTOK = "tiktok"
+    REDNOTE = "rednote"
+    DOUYIN = "douyin"  # Không hỗ trợ - yêu cầu đăng nhập
     UNKNOWN = "unknown"
 
 
@@ -68,7 +71,7 @@ class DownloadError(Enum):
     
     Requirements: 6.1, 6.2, 6.3, 6.4, 6.5
     """
-    VIDEO_NOT_FOUND = "Video không tồn tại hoặc đã bị xóa"
+    VIDEO_NOT_FOUND = "Video không tồn tại hoặc đây là bài viết ảnh, không phải video"
     ACCESS_DENIED = "Video bị giới hạn, không thể tải"
     NETWORK_ERROR = "Lỗi kết nối mạng, vui lòng thử lại sau"
     FILE_TOO_LARGE = "Video quá lớn (>50MB), không thể gửi qua Telegram"
