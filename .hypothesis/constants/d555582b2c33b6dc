@@ -1,0 +1,4 @@
+# file: E:\Project\download-video-bot\downloader.py
+# hypothesis_version: 6.151.4
+
+[99.0, 100.0, 1024, '.', '.m4a', '.mkv', '.mp4', '.webm', '/tmp', 'downloaded_bytes', 'downloading', 'finished', 'format', 'fragment_count', 'fragment_index', 'merge_output_format', 'mp4', 'no_warnings', 'outtmpl', 'progress_hooks', 'quiet', 'status', 'total_bytes', 'total_bytes_estimate']
