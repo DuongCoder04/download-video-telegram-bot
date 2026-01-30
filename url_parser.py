@@ -17,18 +17,26 @@ PLATFORM_PATTERNS: dict[Platform, list[str]] = {
     Platform.YOUTUBE: [
         # youtube.com/watch?v=VIDEO_ID (có thể có thêm params)
         r"(?:https?://)?(?:www\.)?youtube\.com/watch\?v=[\w-]+",
+        # youtube.com/shorts/VIDEO_ID
+        r"(?:https?://)?(?:www\.)?youtube\.com/shorts/[\w-]+",
         # youtu.be/VIDEO_ID
         r"(?:https?://)?(?:www\.)?youtu\.be/[\w-]+",
     ],
     Platform.FACEBOOK: [
         # facebook.com/*/videos/VIDEO_ID
         r"(?:https?://)?(?:www\.)?facebook\.com/.+/videos/\d+",
+        # facebook.com/reel/REEL_ID
+        r"(?:https?://)?(?:www\.)?facebook\.com/reel/\d+",
+        # facebook.com/stories/STORY_ID
+        r"(?:https?://)?(?:www\.)?facebook\.com/stories/\d+",
         # fb.watch/VIDEO_ID
         r"(?:https?://)?fb\.watch/[\w-]+",
     ],
     Platform.INSTAGRAM: [
-        # instagram.com/p/POST_ID hoặc instagram.com/reel/REEL_ID
-        r"(?:https?://)?(?:www\.)?instagram\.com/(?:p|reel)/[\w-]+",
+        # instagram.com/p/POST_ID hoặc instagram.com/reel/REEL_ID hoặc instagram.com/reels/REEL_ID
+        r"(?:https?://)?(?:www\.)?instagram\.com/(?:p|reel|reels)/[\w-]+",
+        # instagram.com/stories/USERNAME/STORY_ID
+        r"(?:https?://)?(?:www\.)?instagram\.com/stories/[\w._]+/\d+",
     ],
 }
 

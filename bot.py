@@ -19,6 +19,7 @@ from telegram.ext import (
     ContextTypes,
     filters,
 )
+from telegram.request import HTTPXRequest
 
 from auth import auth_decorator
 from url_parser import parse_url, is_supported_platform
@@ -161,6 +162,29 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         )
         return
     
+    # Kiểm tra Instagram Story (không hỗ trợ vì cần đăng nhập)
+    if platform == Platform.INSTAGRAM and "/stories/" in url:
+        await update.message.reply_text(
+            "❌ Không hỗ trợ tải Instagram Story.\n\n"
+            "📝 Instagram Story yêu cầu đăng nhập để xem, bot không thể tải được.\n\n"
+            "✅ Các loại link Instagram được hỗ trợ:\n"
+            "• Post: instagram.com/p/...\n"
+            "• Reel: instagram.com/reel/... hoặc instagram.com/reels/..."
+        )
+        return
+    
+    # Kiểm tra Facebook Story (không hỗ trợ vì cần đăng nhập)
+    if platform == Platform.FACEBOOK and "/stories/" in url:
+        await update.message.reply_text(
+            "❌ Không hỗ trợ tải Facebook Story.\n\n"
+            "📝 Facebook Story yêu cầu đăng nhập để xem, bot không thể tải được.\n\n"
+            "✅ Các loại link Facebook được hỗ trợ:\n"
+            "• Video: facebook.com/.../videos/...\n"
+            "• Reel: facebook.com/reel/...\n"
+            "• fb.watch/..."
+        )
+        return
+    
     # Khởi tạo progress manager
     progress = ProgressManager(context.bot)
     progress_msg_id = None
@@ -171,11 +195,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         
         # Callback để cập nhật tiến trình
         last_percent = [0]  # Use list to allow modification in closure
+        last_update_time = [0]  # Throttle updates
         
         async def update_progress_callback(percent: float):
-            # Chỉ cập nhật khi thay đổi đáng kể (>5%)
-            if percent - last_percent[0] >= 5 or percent >= 100:
+            import time
+            current_time = time.time()
+            # Chỉ cập nhật mỗi 3 giây và khi thay đổi >10%
+            if (current_time - last_update_time[0] >= 3 and percent - last_percent[0] >= 10) or percent >= 100:
                 last_percent[0] = percent
+                last_update_time[0] = current_time
                 await progress.update_downloading_percent(chat_id, progress_msg_id, percent)
         
         # Tạo sync callback wrapper (yt-dlp không hỗ trợ async callback)
@@ -274,8 +302,27 @@ def main() -> None:
     logger.info("=" * 50)
     logger.info(f"Owner ID: {OWNER_ID}")
     
-    # Initialize bot application
-    application = Application.builder().token(telegram_token).build()
+    # Initialize bot application with increased timeout and connection pool
+    request = HTTPXRequest(
+        connect_timeout=30.0,
+        read_timeout=60.0,
+        write_timeout=60.0,
+        pool_timeout=30.0,
+        connection_pool_size=20
+    )
+    application = (
+        Application.builder()
+        .token(telegram_token)
+        .request(request)
+        .get_updates_request(HTTPXRequest(
+            connect_timeout=30.0,
+            read_timeout=60.0,
+            write_timeout=60.0,
+            pool_timeout=30.0,
+            connection_pool_size=20
+        ))
+        .build()
+    )
     
     # Create auth-protected handlers
     auth = auth_decorator(OWNER_ID)
